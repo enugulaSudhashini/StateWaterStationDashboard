@@ -1,43 +1,400 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Water Station Count Dashboard</title>
+  <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+  <style>
+    .chart--container {
+      min-height: 530px;
+      width: 100%;
+      height: 100%;
+    }
+    .zc-ref {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="myChart" class="chart--container">
+    <a class="zc-ref" href="https://www.zingchart.com/">Powered by ZingChart</a>
+  </div>
+  <div id="root"></div>
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  <script>
+    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    // Example data (replace with actual data or fetch dynamically)
+    let waterStationData = {
+      AP: 1200,
+      AR: 600,
+      AS: 850,
+      BR: 1100,
+      CT: 750,
+      GA: 400,
+      GJ: 1400,
+      HR: 950,
+      HP: 800,
+      JH: 1050,
+      KA: 2200,
+      KL: 1250,
+      MP: 1700,
+      MH: 2600,
+      MN: 500,
+      ML: 300,
+      MZ: 200,
+      NL: 350,
+      OR: 1000,
+      PB: 1050,
+      RJ: 1700,
+      SK: 250,
+      TN: 1900,
+      TS: 1500,
+      TR: 200,
+      UP: 1050,
+      UT: 200,
+      WB: 1000
+    };
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+    // Function to update tooltip dynamically
+    function updateTooltip(node) {
+      let stateCode = node.id;
+      let count = waterStationData[stateCode] || 'Data not available';
+      return `${node.config.label.text}: ${count} water stations`;
+    }
+
+    let chartConfig = {
+      shapes: [
+        {
+          type: 'zingchart.maps',
+          options: {
+            name: 'ind',
+            panning: false,
+            zooming: false,
+            scrolling: false,
+            style: {
+              tooltip: {
+                borderColor: '#000',
+                borderWidth: '2px',
+                fontSize: '18px'
+              },
+              borderColor: '#000',
+              borderWidth: '2px',
+              controls: {
+                visible: false
+              },
+              hoverState: {
+                alpha: .28
+              },
+              items: {
+                AP: {
+                  tooltip: {
+                    text: `Andhra Pradesh: Click to see ${waterStationData['AP']} water stations`,
+                    backgroundColor: '#ff5722'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Andhra Pradesh'
+                  }
+                },
+                AR: {
+                  tooltip: {
+                    text: `Arunachal Pradesh: Click to see ${waterStationData['AR']} water stations`,
+                    backgroundColor: '#ff9800'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Arunachal Pradesh'
+                  }
+                },
+                AS: {
+                  tooltip: {
+                    text: `Assam: Click to see ${waterStationData['AS']} water stations`,
+                    backgroundColor: '#00AE4D'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Assam'
+                  }
+                },
+                BR: {
+                  tooltip: {
+                    text: `Bihar: Click to see ${waterStationData['BR']} water stations`,
+                    backgroundColor: '#2196F3'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Bihar'
+                  }
+                },
+                CT: {
+                  tooltip: {
+                    text: `Chhattisgarh: Click to see ${waterStationData['CT']} water stations`,
+                    backgroundColor: '#9C27B0'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Chhattisgarh'
+                  }
+                },
+                GA: {
+                  tooltip: {
+                    text: `Goa: Click to see ${waterStationData['GA']} water stations`,
+                    backgroundColor: '#FFC107'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Goa'
+                  }
+                },
+                GJ: {
+                  tooltip: {
+                    text: `Gujarat: Click to see ${waterStationData['GJ']} water stations`,
+                    backgroundColor: '#4CAF50'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Gujarat'
+                  }
+                },
+                HR: {
+                  tooltip: {
+                    text: `Haryana: Click to see ${waterStationData['HR']} water stations`,
+                    backgroundColor: '#FF5722'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Haryana'
+                  }
+                },
+                HP: {
+                  tooltip: {
+                    text: `Himachal Pradesh: Click to see ${waterStationData['HP']} water stations`,
+                    backgroundColor: '#E91E63'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Himachal Pradesh'
+                  }
+                },
+                JH: {
+                  tooltip: {
+                    text: `Jharkhand: Click to see ${waterStationData['JH']} water stations`,
+                    backgroundColor: '#00BCD4'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Jharkhand'
+                  }
+                },
+                KA: {
+                  tooltip: {
+                    text: `Karnataka: Click to see ${waterStationData['KA']} water stations`,
+                    backgroundColor: '#673AB7'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Karnataka'
+                  }
+                },
+                KL: {
+                  tooltip: {
+                    text: `Kerala: Click to see ${waterStationData['KL']} water stations`,
+                    backgroundColor: '#795548'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Kerala'
+                  }
+                },
+                MP: {
+                  tooltip: {
+                    text: `Madhya Pradesh: Click to see ${waterStationData['MP']} water stations`,
+                    backgroundColor: '#3F51B5'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Madhya Pradesh'
+                  }
+                },
+                MH: {
+                  tooltip: {
+                    text: `Maharashtra: Click to see ${waterStationData['MH']} water stations`,
+                    backgroundColor: '#009688'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Maharashtra'
+                  }
+                },
+                MN: {
+                  tooltip: {
+                    text: `Manipur: Click to see ${waterStationData['MN']} water stations`,
+                    backgroundColor: '#FF9800'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Manipur'
+                  }
+                },
+                ML: {
+                  tooltip: {
+                    text: `Meghalaya: Click to see ${waterStationData['ML']} water stations`,
+                    backgroundColor: '#FFC107'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Meghalaya'
+                  }
+                },
+                MZ: {
+                  tooltip: {
+                    text: `Mizoram: Click to see ${waterStationData['MZ']} water stations`,
+                    backgroundColor: '#4CAF50'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Mizoram'
+                  }
+                },
+                NL: {
+                  tooltip: {
+                    text: `Nagaland: Click to see ${waterStationData['NL']} water stations`,
+                    backgroundColor: '#2196F3'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Nagaland'
+                  }
+                },
+                OR: {
+                  tooltip: {
+                    text: `Odisha: Click to see ${waterStationData['OR']} water stations`,
+                    backgroundColor: '#9C27B0'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Odisha'
+                  }
+                },
+                PB: {
+                  tooltip: {
+                    text: `Punjab: Click to see ${waterStationData['PB']} water stations`,
+                    backgroundColor: '#FF5722'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Punjab'
+                  }
+                },
+                RJ: {
+                  tooltip: {
+                    text: `Rajasthan: Click to see ${waterStationData['RJ']} water stations`,
+                    backgroundColor: '#E91E63'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Rajasthan'
+                  }
+                },
+                SK: {
+                  tooltip: {
+                    text: `Sikkim: Click to see ${waterStationData['SK']} water stations`,
+                    backgroundColor: '#00BCD4'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Sikkim'
+                  }
+                },
+                TN: {
+                  tooltip: {
+                    text: `Tamil Nadu: Click to see ${waterStationData['TN']} water stations`,
+                    backgroundColor: '#673AB7'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Tamil Nadu'
+                  }
+                },
+                TS: {
+                  tooltip: {
+                    text: `Telangana: Click to see ${waterStationData['TS']} water stations`,
+                    backgroundColor: '#795548'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Telangana'
+                  }
+                },
+                TR: {
+                  tooltip: {
+                    text: `Tripura: Click to see ${waterStationData['TR']} water stations`,
+                    backgroundColor: '#3F51B5'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Tripura'
+                  }
+                },
+                UP: {
+                  tooltip: {
+                    text: `Uttar Pradesh: Click to see ${waterStationData['UP']} water stations`,
+                    backgroundColor: '#009688'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Uttar Pradesh'
+                  }
+                },
+                UT: {
+                  tooltip: {
+                    text: `Uttarakhand: Click to see ${waterStationData['UT']} water stations`,
+                    backgroundColor: '#FF9800'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'Uttarakhand'
+                  }
+                },
+                WB: {
+                  tooltip: {
+                    text: `West Bengal: Click to see ${waterStationData['WB']} water stations`,
+                    backgroundColor: '#FFC107'
+                  },
+                  label: {
+                    visible: true,
+                    text: 'West Bengal'
+                  }
+                },
+              },
+              label: {
+                fontSize: '15px',
+                visible: true
+              }
+            }
+          }
+        }
+      ],
+      events: {
+        node_click: function(p) {
+          let node = p.node;
+          let tooltipText = updateTooltip(node);
+          node.config.tooltip.text = tooltipText;
+          node.update();
+        }
+      }
+    };
+
+    zingchart.loadModules('maps,maps-ind,maps-world-countries');
+    zingchart.render({
+      id: 'myChart',
+      data: chartConfig,
+      height: '100%',
+      width: '100%',
+    });
+  </script>
+</body>
 </html>
